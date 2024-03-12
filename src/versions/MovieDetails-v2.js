@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+// import { API_KEY } from "../App";
 import Loader from "./Loader";
 import StarRating from "./StarRating";
-import { useKey } from "../hooks/useKey";
 
 const API_KEY = "ff0a7ec6";
 
@@ -16,10 +16,14 @@ export default function MovieDetails({
   const [userRating, setUserRating] = useState("");
 
   const countRef = useRef(0);
+  // let count = 0; // this won't work
 
   useEffect(
     function () {
+      // if (userRating) countRef.current = countRef.current + 1;
+      // if (userRating) countRef.current += 1;
       if (userRating) countRef.current++;
+      // if (userRating) count++; // this won't work
     },
     [userRating]
   );
@@ -52,13 +56,29 @@ export default function MovieDetails({
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
       countRatingDecisions: countRef.current,
+      // count, // this won't work
     };
 
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
 
-  useKey("Escape", onCloseMovie);
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
 
   useEffect(
     function () {
