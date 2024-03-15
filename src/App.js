@@ -21,7 +21,7 @@ export default function App() {
   const { movies, isLoading, error } = useMovies(query);
 
   function handleSelectMovie(id) {
-    setSelectedId((currentId) => (id === currentId ? null : id));
+    setSelectedId((currentId) => (currentId === id ? null : id));
   }
 
   function handleCloseMovie() {
